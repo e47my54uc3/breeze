@@ -9,7 +9,8 @@ class  ItemsController < ApplicationController
       member_token: ENV['authorize_write_token'],
     )
 
-    @board = Trello::Board.all.detect { |board| board.id == '55845bdb3318e9b6a881b5af' }
+    @board = Trello::Board.all.detect { |board| board.id == ENV['balance_board'] }
+
   end
 
    # def show
@@ -42,12 +43,12 @@ class  ItemsController < ApplicationController
 
     user.check_status
 
-    p binding.byebug
+    # p binding.byebug
 
     if user.delinquent
-      list_id = '55845c213d89bb5cba82fdbb'
+      list_id = ENV['Open']
     else
-      list_id = '55845c23078838b9b03515d5'
+      list_id = ENV['Resolved']
     end
 
     
