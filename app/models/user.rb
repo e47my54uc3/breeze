@@ -2,6 +2,8 @@ require 'trello'
 class User < ActiveRecord::Base
   has_many :items
 
+  attr_accessor :which_list
+
  
 
   def find_list
@@ -22,14 +24,12 @@ class User < ActiveRecord::Base
   end
  
   def check_status
+    total_balance
+
     if self.balance <= -200
-
-      self.delinquent = true
-      return ENV['Open_list']
+      self.update(delinquent: true)
     else
-
-      self.delinquent = false
-      return ENV['Resolved_list']
+      self.update(delinquent: false)
     end
   end
 
