@@ -26,7 +26,6 @@ class  ItemsController < ApplicationController
 
  
   def create
-
     item_type = params[:item_type]
     amount = params[:amount]
     user = User.where(id: params[:user_id]).first
