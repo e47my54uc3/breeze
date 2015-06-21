@@ -1,10 +1,19 @@
 class  TrelloController < ApplicationController
   include TrelloHelper
-  attr_accessor :trello
+
+  attr_reader :board
 
   def initialize
-    @trello = TrelloHelper.new_client
+    @board = Trello::Board.all.find { |board| board.id == ENV['balance_tracker_board'] }
   end
+  
+
+  def show
+    puts board
+  end
+
+
+
 
   
 
