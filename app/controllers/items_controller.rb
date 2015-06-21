@@ -12,10 +12,8 @@ class  ItemsController < ApplicationController
   def show
     item = Item.where(id: params[:id]).first
     user = User.where(id: item.user_id).first
-
-    list_id = user.check_status
    
-    render :json => { item: item, user: user, list_id: list_id}
+    render :json => { item: item, user: user }
   end
 
   
@@ -30,7 +28,7 @@ class  ItemsController < ApplicationController
     amount = params[:amount]
     user = User.where(id: params[:user_id]).first
 
-    Item.create(
+    item = Item.create(
       item_type: item_type,
       amount: amount,
       user_id: user.id
@@ -60,7 +58,7 @@ class  ItemsController < ApplicationController
       target_card.save
     end
 
-    render :json => user
+    render :json => { item: item, user: user }
   end
 
 
