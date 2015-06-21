@@ -1,3 +1,5 @@
+require 'date'
+
 class  ItemsController < ApplicationController
   include TrelloHelper
 
@@ -24,6 +26,12 @@ class  ItemsController < ApplicationController
 
  
   def create
+    item_date = params[:date] ||= (Time.now.strftime('%Y-%m-%e'))
+
+    #set the time to a day in the past
+
+   
+
     item_type = params[:item_type]
     amount = params[:amount]
     user = User.where(id: params[:user_id]).first
