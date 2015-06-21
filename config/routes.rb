@@ -9,9 +9,9 @@ Rails.application.routes.draw do
     get 'trello' => 'trello#show'
 
 
-    get "/users/:id/items" => 'trello#show'
-
-   
+    resources :users do
+      resources :items, shallow: true
+    end
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase

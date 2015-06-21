@@ -9,8 +9,11 @@ class  TrelloController < ApplicationController
   
 
   def show
-    puts board
+    @user = User.first
+    render :json => @user
   end
+
+
 
 
 
