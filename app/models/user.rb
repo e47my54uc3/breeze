@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
 
  
   def total_balance
-    accumulation = self.balance
+    accumulation = 0
 
     self.items.each do |item|
       if item.item_type == 'fee'
@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
       end
     end
 
-    self.balance += accumulation
+    self.balance = accumulation
     self.save
   end
  
