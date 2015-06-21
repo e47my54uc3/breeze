@@ -7,11 +7,11 @@ class  ItemsController < ApplicationController
     @trello_client = TrelloHelper.client
 
     @board = TrelloHelper.board
-    binding.pry
+    # binding.pry
 
   end
 
-   # def show
+  # def show
   #   # @user = User.first
   #   u = User.find(params[:user_id])
 
@@ -41,20 +41,25 @@ class  ItemsController < ApplicationController
 
     user.check_status
 
-    # p binding.byebug
-
     if user.delinquent
       list_id = ENV['Open']
     else
       list_id = ENV['Resolved']
     end
 
-    
 
-    card = @trello_client.create(:card, {
-      'name' => user.name,
-      'idList' => list_id,
-    })
+    board.cards.detect do |card|
+      if card.name == user.name
+        card.list_id = list_id
+        card.save
+      end
+    end
+   
+
+    # card = @trello_client.create(:card, {
+    #   'name' => user.name,
+    #   'idList' => list_id,
+    # })
 
   end
 
