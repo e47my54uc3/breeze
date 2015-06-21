@@ -3,7 +3,7 @@ require 'date'
 class  ItemsController < ApplicationController
   include TrelloHelper
 
-  attr_reader :board
+  attr_reader :board, :trello_client
 
   def initialize
     @trello_client = TrelloHelper.client
@@ -56,7 +56,7 @@ class  ItemsController < ApplicationController
 
     #create new card if user is delinquent
     if target_card.nil? && user.delinquent
-      @trello_client.create(:card, {
+      trello_client.create(:card, {
           'name' => user.name,
           'idList' => list
       })

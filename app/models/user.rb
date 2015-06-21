@@ -4,35 +4,33 @@ require 'date'
 class User < ActiveRecord::Base
   has_many :items
  
-  def total_balance
-    #check delinquency days outstanding
-    if self.delinquent
-      accumulation = (-5 * self.delinquency_lapse)
+  def current_balance
+   
+    last_item = self.items.last
+
+    if last_item.item_type == 'fee'
+      self.balance -= last_item.amount
     else
-      accumulation = 0
+      self.balance += last_item.amount
     end
 
-    #total fees and payments
-    self.items.each do |item|
-      if item.item_type == 'fee'
-        accumulation -= (item.amount)
-      else
-        accumulation += (item.amount)
-      end
-    end
+    self.save
+  end
 
-    self.balance = accumulation
+
+  def add_delinquency_fee
+    self.balance += (-5 * self.delinquency_lapse)
     self.save
   end
  
   def check_status
-    total_balance
-    
+    current_balance
+
     if self.balance <= -200
       last_pmt_date = self.updated_at.strftime('%Y-%m-%e')
       last_item_date = Item.where(user_id: self.id).last.created_at.strftime('%Y-%m-%e')
 
-      #adjust delinquency days : elapsed item notice time added with days outstanding
+      #adjust delinquency days : elapsed item notice time added with current days outstanding
       days = Date.parse(last_item_date).mjd - Date.parse(last_pmt_date).mjd + self.delinquency_lapse
      
       self.update(delinquent: true)
@@ -42,7 +40,7 @@ class User < ActiveRecord::Base
       self.update(delinquency_lapse: 0)
     end
 
-    # total_balance
+    add_delinquency_fee
 
     if self.delinquent
       return ENV['Open']
