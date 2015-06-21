@@ -29,6 +29,11 @@ class User < ActiveRecord::Base
       self.update(delinquent: false)
     end
 
+    if self.delinquent
+      return ENV['Open']
+    else
+      return ENV['Resolved']
+    end
   end
 
 

@@ -39,27 +39,22 @@ class  ItemsController < ApplicationController
       user_id: user.id
     )
 
-    user.check_status
+    list = user.check_status
 
-    if user.delinquent
-      list_id = ENV['Open']
-    else
-      list_id = ENV['Resolved']
-    end
-
-
+   
     board.cards.detect do |card|
       if card.name == user.name
-        card.list_id = list_id
+        card.list_id= list
         card.save
+      else
+        @trello_client.create(:card, {
+          'name' => user.name,
+          'idList' => list
+          })
       end
     end
-   
 
-    # card = @trello_client.create(:card, {
-    #   'name' => user.name,
-    #   'idList' => list_id,
-    # })
+    render :json => user
 
   end
 
