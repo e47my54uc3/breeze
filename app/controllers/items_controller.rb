@@ -4,12 +4,10 @@ class  ItemsController < ApplicationController
   attr_reader :board
 
   def initialize
-    @trello_client = Trello::Client.new(
-      developer_public_key: ENV['developer_public_key'],
-      member_token: ENV['authorize_write_token'],
-    )
+    @trello_client = TrelloHelper.client
 
-    @board = Trello::Board.all.detect { |board| board.id == ENV['balance_board'] }
+    @board = TrelloHelper.board
+    binding.pry
 
   end
 

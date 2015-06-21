@@ -90,6 +90,8 @@ GEM
     pry-byebug (3.1.0)
       byebug (~> 4.0)
       pry (~> 0.10)
+    pry-rails (0.3.4)
+      pry (>= 0.9.10)
     rack (1.6.4)
     rack-cors (0.4.0)
     rack-test (0.6.3)
@@ -174,8 +176,8 @@ DEPENDENCIES
   dotenv-rails (~> 2.0.1)
   jbuilder (~> 2.0)
   jquery-rails
-  pry
   pry-byebug
+  pry-rails
   rack-cors
   rails (= 4.2.1)
   ruby-trello
