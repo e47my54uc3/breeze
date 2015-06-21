@@ -4,15 +4,15 @@ class  ItemsController < ApplicationController
   attr_reader :board
 
   def initialize
-    @board = Trello::Board.all.find { |board| board.id == ENV['balance_tracker_board'] }
-  end
-  
-  def index
-    items = Item.where(params[:user_id])
-    render :json => items
+    @trello_client = Trello::Client.new(
+      developer_public_key: ENV['developer_public_key'],
+      member_token: ENV['authorize_write_token'],
+    )
+
+    @board = Trello::Board.all.detect { |board| board.id == '55845bdb3318e9b6a881b5af' }
   end
 
-  # def show
+   # def show
   #   # @user = User.first
   #   u = User.find(params[:user_id])
 
@@ -21,8 +21,15 @@ class  ItemsController < ApplicationController
   #   render :json => u
   # end
 
+  
+  def index
+    items = Item.where(params[:user_id])
+    render :json => items
+  end
 
+ 
   def create
+
     item_type = params[:item_type]
     amount = params[:amount]
     user = User.where(id: params[:user_id]).first
@@ -35,6 +42,7 @@ class  ItemsController < ApplicationController
 
     user.check_status
 
+    p binding.byebug
 
     if user.delinquent
       list_id = '55845c213d89bb5cba82fdbb'
@@ -42,19 +50,11 @@ class  ItemsController < ApplicationController
       list_id = '55845c23078838b9b03515d5'
     end
 
-    p list_id
+    
 
-
-    @client = Trello::Client.new(
-      developer_public_key: ENV['developer_public_key'],
-      member_token: ENV['authorize_write_token'],
-    )
-
-    card = @client.create(:card, {
+    card = @trello_client.create(:card, {
       'name' => user.name,
       'idList' => list_id,
-      
-
     })
 
   end

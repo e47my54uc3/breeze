@@ -1,8 +1,11 @@
 require 'trello'
 class User < ActiveRecord::Base
   has_many :items
-
   attr_accessor :which_list
+
+  def initialize
+    @which_list = self.delinquent
+  end
 
  
   def total_balance
@@ -30,6 +33,13 @@ class User < ActiveRecord::Base
     else
       self.update(delinquent: false)
     end
+
+    #find the user on the board
+    #delete the user
+    #add to proper_board
+    # if self.created_at != self.updated_at
+
+    # end
   end
 
 

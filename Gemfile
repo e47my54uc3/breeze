@@ -25,6 +25,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'dotenv-rails', '~> 2.0.1'
 gem 'ruby-trello'
 gem 'rack-cors', :require => 'rack/cors'
+gem 'pry-byebug'
+gem 'pry'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
