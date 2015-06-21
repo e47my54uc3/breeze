@@ -1,9 +1,6 @@
 require 'trello'
 class User < ActiveRecord::Base
   has_many :items
-  attr_accessor :which_list
-
-
  
   def total_balance
     accumulation = 0

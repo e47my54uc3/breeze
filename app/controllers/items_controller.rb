@@ -7,18 +7,16 @@ class  ItemsController < ApplicationController
     @trello_client = TrelloHelper.client
 
     @board = TrelloHelper.board
-    # binding.pry
-
   end
 
-  # def show
-  #   # @user = User.first
-  #   u = User.find(params[:user_id])
+  def show
+    item = Item.where(id: params[:id]).first
+    user = User.where(id: item.user_id).first
 
-  #   # list = u.check_status
-  #   # render :json => list
-  #   render :json => u
-  # end
+    list_id = user.check_status
+   
+    render :json => { item: item, user: user, list_id: list_id}
+  end
 
   
   def index
@@ -39,57 +37,29 @@ class  ItemsController < ApplicationController
       user_id: user.id
     )
 
-    list = user.check_status
+    target_card = nil
+    list = user.check_status #set the list according to user
 
-   
+    #check for existing card
     board.cards.detect do |card|
       if card.name == user.name
-        card.list_id= list
-        card.save
-      else
-        @trello_client.create(:card, {
-          'name' => user.name,
-          'idList' => list
-          })
+        target_card = card
       end
     end
 
+    #create or update cards
+    if target_card.nil?
+      @trello_client.create(:card, {
+          'name' => user.name,
+          'idList' => list
+      })
+    else
+      target_card.list_id = list
+      target_card.save
+    end
+
     render :json => user
-
   end
 
-
-  def show
-    item_type = params[:item_type]
-    amount = params[:amount]
-
-    item = Item.where(id: params[:id]).first
-    user = User.where(id: item.user_id).first
-
-    user.check_status
-    user.delinquent ? list_id = ENV['Open_list'] : list_id = ENV['Resolved_list']
-
-
-
-    render :json => { item: item, user: user, list_id: list_id}
-
-    # user = User.where(id: item.user_id)
-
-
-    # user.check_status
-
-    #
-
-
-
-    # render :json => list_id
-  end
-
-
-
-
-
-
-  
 
 end
