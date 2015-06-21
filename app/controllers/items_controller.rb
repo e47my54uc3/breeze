@@ -47,13 +47,16 @@ class  ItemsController < ApplicationController
       end
     end
 
-    #create or update cards
-    if target_card.nil?
+    #create new card if user is delinquent
+    if target_card.nil? && user.delinquent
       @trello_client.create(:card, {
           'name' => user.name,
           'idList' => list
       })
-    else
+    end
+
+    #update card
+    if target_card
       target_card.list_id = list
       target_card.save
     end
