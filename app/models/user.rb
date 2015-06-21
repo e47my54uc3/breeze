@@ -5,21 +5,20 @@ class User < ActiveRecord::Base
   attr_accessor :which_list
 
  
-
-  def find_list
-     Trello::List.find(board_id: board.id)
-  end
-
   def total_balance
-    self.balance = 0
+    total = self.balance
+    
+    accumulation = 0
 
     self.items.each do |item|
       if item.item_type == 'fee'
-        self.balance -= item.amount
+        accumulation -= (item.amount.abs)
       else
-        self.balance += item.amount
+        accumulation += (item.amount.abs)
       end
     end
+
+    self.balance += accumulation
     self.save
   end
  

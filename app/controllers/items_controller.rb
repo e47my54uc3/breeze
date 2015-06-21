@@ -23,18 +23,26 @@ class  ItemsController < ApplicationController
 
 
   def create
-    # item = Item.where(id: params[:id]).first
+    item_type = params[:item_type]
+    amount = params[:amount]
     user = User.where(id: params[:user_id]).first
 
-    user.check_status
-    user.delinquent ? list_id = ENV['Open_list'] : list_id = ENV['Resolved_list']
+    Item.create(
+      item_type: item_type,
+      amount: amount,
+      user_id: user.id
+    )
 
-     # Trello::Card.create(
-        
-     #    'name' => user.name,
-     #    'idList' => '55845c213d89bb5cba82fdbb'
-     #    # desc: object.url.to_s
-     #  )
+    user.check_status
+
+
+    if user.delinquent
+      list_id = '55845c213d89bb5cba82fdbb'
+    else
+      list_id = '55845c23078838b9b03515d5'
+    end
+
+    p list_id
 
 
     @client = Trello::Client.new(
@@ -44,7 +52,7 @@ class  ItemsController < ApplicationController
 
     card = @client.create(:card, {
       'name' => user.name,
-      'idList' => '55845c213d89bb5cba82fdbb',
+      'idList' => list_id,
       
 
     })
