@@ -26,20 +26,22 @@ class  ItemsController < ApplicationController
 
  
   def create
-    item_date = params[:date] ||= (Time.now.strftime('%Y-%m-%e'))
-
-    #set the time to a day in the past
-
-   
-
+    if params[:date]
+      item_date = Date.parse(params[:date])
+    else
+      item_date = Date.parse(Time.now.strftime('%Y-%m-%e'))
+    end
+ 
     item_type = params[:item_type]
     amount = params[:amount]
     user = User.where(id: params[:user_id]).first
 
     item = Item.create(
+      created_at: item_date,
       item_type: item_type,
       amount: amount,
-      user_id: user.id
+      user_id: user.id,
+      updated_at: item_date
     )
 
     target_card = nil

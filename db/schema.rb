@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150621062211) do
+ActiveRecord::Schema.define(version: 20150621211217) do
 
   create_table "items", force: :cascade do |t|
     t.string   "item_type"
@@ -23,10 +23,11 @@ ActiveRecord::Schema.define(version: 20150621062211) do
 
   create_table "users", force: :cascade do |t|
     t.string   "name"
-    t.integer  "balance",    default: 0
-    t.boolean  "delinquent", default: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.integer  "balance",           default: 0
+    t.boolean  "delinquent",        default: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.integer  "delinquency_lapse", default: 0
   end
 
 end
